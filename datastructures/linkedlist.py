@@ -16,6 +16,9 @@ class Node():
 
 class linkedList():
     def __init__(self, nodes=None):
+        """
+        Initiate a new instance of linked list with a list of elements to be instantiated with the Node() class.
+        """
         self.head = None
 
         if nodes is not None:
@@ -36,6 +39,24 @@ class linkedList():
         nodes.append("None")
         return "->".join(nodes)
     
+    def __iter__(self):
+        node = self.head
+        while node is not None:
+            yield node.data
+            node = node.next
+
+    def addFirst(self, newNode):
+        """
+        The newNode element is an intance of the Node() class
+        """
+        newNode.next = self.head
+        self.head = newNode
+
+    def addLast(self, newNode):
+        pass
+    
+## Test cases:
+
 l_list = linkedList()
 
 first_node = Node("a")
@@ -69,9 +90,81 @@ print(loopedLList)
 arrLList = linkedList([1,2,3,4,5])
 print(arrLList)
 
+for node in arrLList:
+    print(f"This node is: {node}")
+
 ## So far, we looked at the basic constructors to create a linked list of nodes.
 
-## Traversing a linked list ##
+## Traversing (iterating) a linked list ##
 
 # To traverse from the start to the end of a linked list, define the __iter__ function.
 # Termination condition: the last node should point to 'None'.
+
+# Adding elements to the linked list #
+
+# There are three different scenarios for adding new nodes to a linked list:
+#   - Adding to the beginning of the list (creating a new head)
+#   - Adding to the end of the list (existing last node will now point to new node and new node points to null)
+#   - Adding to the middle of the linked list. This is involve changing the pointers for the existing elements in the list, to-and-from the new node that will be added.
+
+### Miscellaneous python knowledge for creating linked lists ###
+
+# Understanding the iterators, generators and yield to better understand __iter__ function.
+# Iterable - It is any data structure or data type where the stored elements can be read one-by-one, ie, iterated over. Lists, strings, dicts are all iterables.
+# Generator - These are a type of iterable where you only iterate over once.
+# A generator is created by using () --> see example
+# Creating a generator variable, and calling it will not execute the lines of code.
+# Only when for .. in ..: iterator syntax is used will the generator code be executed.
+
+testList = [x*x for x in range(3)]
+testGenerator = (x*x for x in range(3))
+
+print(testList)
+print(testGenerator)
+#printing the output, we can see that in list comprehension, the elements were stored in memory. For large lists, this can become inefficient.
+# The generator points to an iterable object in memory, but not the actual values, as they have not been computed yet.
+
+for _ in testGenerator:
+    print(_) # Now the code for the generator comprehension is actually executed.
+
+def generatorTest():
+    testList = [1,2,3]
+    yield testList[0]
+    yield testList[1]
+    yield testList[2]
+
+
+firstGen = generatorTest()
+print(firstGen)
+print(next(firstGen))
+print(next(firstGen))
+print(next(firstGen))
+
+# the yield keyword returns a generator object, which will point to the objext in memory.
+# To iterate manually through the elements in the generator, need to use the 'next()' method.
+# This can be simplified by using loops:
+
+def generatorTest2():
+    testList = [4,5,6]
+    for item in testList:
+        yield item
+
+def genOutput():
+    secondGen = generatorTest2()
+    print(secondGen)
+
+    for item in secondGen:
+        print(item)
+
+genOutput()
+
+def yieldFrom():
+    yield from (x for x in range(3)) # generator within a generator
+
+def yieldFromOutput():
+    x = yieldFrom()
+    # print(x)
+    for item in x:
+        print(item)
+
+yieldFromOutput()
