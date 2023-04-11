@@ -53,7 +53,44 @@ class linkedList():
         self.head = newNode
 
     def addLast(self, newNode):
+        """
+        The newNode element is an instance of the Node() class and will be added to the end of the linked list.
+        """
+        if self.head is None:
+            self.head = newNode
+            return
+        
+        previousNode = self.head
+        while previousNode is not None:
+            previousNode = previousNode.next
+            if previousNode.next is None:
+                previousNode.next = newNode
+                break
+
+    def addBefore(self, existingNode, newNode):
+        """
+        The newNode will be added before the existingNode passed as an argument.
+        """
+        if self.head is None:
+            raise Exception("The list is empty")
+        
+        if self.head == existingNode:
+            return self.addFirst(newNode)
+        
+        currentNode = self.head
+        while currentNode.data != existingNode:
+            if currentNode.next == existingNode:
+                currentNode.next = newNode
+                newNode.next = existingNode
+                return
+            # print(currentNode)
+            
+            currentNode = currentNode.next
+        return "Didn't work"
+
+    def addAfter(self, newNode):
         pass
+
     
 ## Test cases:
 
@@ -90,8 +127,10 @@ print(loopedLList)
 arrLList = linkedList([1,2,3,4,5])
 print(arrLList)
 
+# Testing the __iter__ function:
 for node in arrLList:
     print(f"This node is: {node}")
+
 
 ## So far, we looked at the basic constructors to create a linked list of nodes.
 
@@ -107,6 +146,15 @@ for node in arrLList:
 #   - Adding to the end of the list (existing last node will now point to new node and new node points to null)
 #   - Adding to the middle of the linked list. This is involve changing the pointers for the existing elements in the list, to-and-from the new node that will be added.
 
+# Testing the addFirst and AddLast methods of class:
+
+arrLList.addFirst(Node(0))
+arrLList.addLast(Node(6))
+
+print(f"Linked list with added elements: {arrLList}")
+
+arrLList.addBefore(5, Node(25))
+print(f"Adding new element before specific element in linked list:\n{arrLList}")
 ### Miscellaneous python knowledge for creating linked lists ###
 
 # Understanding the iterators, generators and yield to better understand __iter__ function.
