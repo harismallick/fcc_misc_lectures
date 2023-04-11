@@ -42,8 +42,21 @@ class linkedList():
     def __iter__(self):
         node = self.head
         while node is not None:
-            yield node.data
+            yield node
             node = node.next
+
+    def getData(self):
+        """
+        Iterate through to linked list to output the data stored in the nodes
+        """
+        node = self.head
+        linkedListData = []
+        while node is not None:
+            # yield node.data
+            linkedListData.append(node.data)
+            node = node.next
+
+        return linkedListData
 
     def addFirst(self, newNode):
         """
@@ -65,7 +78,7 @@ class linkedList():
             previousNode = previousNode.next
             if previousNode.next is None:
                 previousNode.next = newNode
-                break
+                return
 
     def addBefore(self, existingNode, newNode):
         """
@@ -77,18 +90,33 @@ class linkedList():
         if self.head == existingNode:
             return self.addFirst(newNode)
         
-        currentNode = self.head
-        while currentNode.data != existingNode:
-            if currentNode.next == existingNode:
-                currentNode.next = newNode
-                newNode.next = existingNode
-                return
+        previousNode = self.head
+        # while True:
+        for node in self:
+            if node.data == existingNode:
+                previousNode.next = newNode
+                newNode.next = node
+                return "Node added"
             # print(currentNode)
-            
-            currentNode = currentNode.next
+            previousNode = node
+
         return "Didn't work"
 
-    def addAfter(self, newNode):
+    def addAfter(self, newNode, existingNode):
+        if self.head is None:
+            raise Exception("This list is empty")
+        
+        if self.head == existingNode:
+            return self.addLast(newNode)
+        
+        for node in self:
+            if node.data == existingNode:
+                temp = node.next
+                node.next = newNode
+                newNode.next = temp
+                return "Node added"
+            
+    def deleteNode(self, nodeData):
         pass
 
     
@@ -122,15 +150,15 @@ for item in elements:
         loopedLList.head = node
         previousNode = node
 
-print(loopedLList)
+print(f"Looped list output: {loopedLList}")
 
 arrLList = linkedList([1,2,3,4,5])
 print(arrLList)
 
-# Testing the __iter__ function:
-for node in arrLList:
-    print(f"This node is: {node}")
+# Print the data stored in the linked list with the getData() function:
 
+testOutput = arrLList.getData()
+print(testOutput)
 
 ## So far, we looked at the basic constructors to create a linked list of nodes.
 
@@ -155,6 +183,10 @@ print(f"Linked list with added elements: {arrLList}")
 
 arrLList.addBefore(5, Node(25))
 print(f"Adding new element before specific element in linked list:\n{arrLList}")
+
+arrLList.addAfter(Node(50), 5)
+print(f"Element added after the given Node:\n{arrLList}")
+
 ### Miscellaneous python knowledge for creating linked lists ###
 
 # Understanding the iterators, generators and yield to better understand __iter__ function.
