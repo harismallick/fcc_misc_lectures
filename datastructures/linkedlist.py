@@ -47,7 +47,7 @@ class linkedList():
 
     def getData(self):
         """
-        Iterate through to linked list to output the data stored in the nodes
+        Iterate through the linked list to output the data stored in the nodes
         """
         node = self.head
         linkedListData = []
@@ -117,7 +117,23 @@ class linkedList():
                 return "Node added"
             
     def deleteNode(self, nodeData):
-        pass
+        if self.head is None:
+            raise Exception("This list is empty")
+        
+        # Edge case for the node to be deleted being the head
+        if self.head.data == nodeData:
+            self.head = self.head.next
+            return "Node head changed"
+        
+        previousNode = self.head
+        for node in self:
+            if node.data == nodeData:
+                previousNode.next = node.next
+                return f"{nodeData} deleted"
+
+            previousNode = node
+
+        
 
     
 ## Test cases:
@@ -187,6 +203,11 @@ print(f"Adding new element before specific element in linked list:\n{arrLList}")
 arrLList.addAfter(Node(50), 5)
 print(f"Element added after the given Node:\n{arrLList}")
 
+# Testing deleting a node with the deleteNode() function #
+
+arrLList.deleteNode(50)
+print(f"Array after a node has been deleted:\n{arrLList}")
+
 ### Miscellaneous python knowledge for creating linked lists ###
 
 # Understanding the iterators, generators and yield to better understand __iter__ function.
@@ -196,55 +217,55 @@ print(f"Element added after the given Node:\n{arrLList}")
 # Creating a generator variable, and calling it will not execute the lines of code.
 # Only when for .. in ..: iterator syntax is used will the generator code be executed.
 
-testList = [x*x for x in range(3)]
-testGenerator = (x*x for x in range(3))
+# testList = [x*x for x in range(3)]
+# testGenerator = (x*x for x in range(3))
 
-print(testList)
-print(testGenerator)
-#printing the output, we can see that in list comprehension, the elements were stored in memory. For large lists, this can become inefficient.
-# The generator points to an iterable object in memory, but not the actual values, as they have not been computed yet.
+# print(testList)
+# print(testGenerator)
+# #printing the output, we can see that in list comprehension, the elements were stored in memory. For large lists, this can become inefficient.
+# # The generator points to an iterable object in memory, but not the actual values, as they have not been computed yet.
 
-for _ in testGenerator:
-    print(_) # Now the code for the generator comprehension is actually executed.
+# for _ in testGenerator:
+#     print(_) # Now the code for the generator comprehension is actually executed.
 
-def generatorTest():
-    testList = [1,2,3]
-    yield testList[0]
-    yield testList[1]
-    yield testList[2]
+# def generatorTest():
+#     testList = [1,2,3]
+#     yield testList[0]
+#     yield testList[1]
+#     yield testList[2]
 
 
-firstGen = generatorTest()
-print(firstGen)
-print(next(firstGen))
-print(next(firstGen))
-print(next(firstGen))
+# firstGen = generatorTest()
+# print(firstGen)
+# print(next(firstGen))
+# print(next(firstGen))
+# print(next(firstGen))
 
-# the yield keyword returns a generator object, which will point to the objext in memory.
-# To iterate manually through the elements in the generator, need to use the 'next()' method.
-# This can be simplified by using loops:
+# # the yield keyword returns a generator object, which will point to the objext in memory.
+# # To iterate manually through the elements in the generator, need to use the 'next()' method.
+# # This can be simplified by using loops:
 
-def generatorTest2():
-    testList = [4,5,6]
-    for item in testList:
-        yield item
+# def generatorTest2():
+#     testList = [4,5,6]
+#     for item in testList:
+#         yield item
 
-def genOutput():
-    secondGen = generatorTest2()
-    print(secondGen)
+# def genOutput():
+#     secondGen = generatorTest2()
+#     print(secondGen)
 
-    for item in secondGen:
-        print(item)
+#     for item in secondGen:
+#         print(item)
 
-genOutput()
+# genOutput()
 
-def yieldFrom():
-    yield from (x for x in range(3)) # generator within a generator
+# def yieldFrom():
+#     yield from (x for x in range(3)) # generator within a generator
 
-def yieldFromOutput():
-    x = yieldFrom()
-    # print(x)
-    for item in x:
-        print(item)
+# def yieldFromOutput():
+#     x = yieldFrom()
+#     # print(x)
+#     for item in x:
+#         print(item)
 
-yieldFromOutput()
+# yieldFromOutput()
